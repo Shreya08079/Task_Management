@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import "./TaskForm.css"; // Create this CSS file for styling
 
 const TaskForm = ({ getData }) => {
     const addTask = async (obj) => {
@@ -22,20 +23,12 @@ const TaskForm = ({ getData }) => {
     const handleAddTask = (e) => {
         e.preventDefault();
         if (e.target.assignee.value.length > 3) {
-            // console.log(e.target.taskTitle.value);
-            // console.log(e.target[1].value);
-            // console.log(e.target[2].value);
-            // console.log(e.target[3].value);
-            // console.log(e.target.taskTitle.value);
-            // console.log(e.target.assignee.value);
-            // console.log(e.target.deadline.value);
-            // console.log(e.target.priority.value);
             const dataObj = {
                 taskTitle: e.target.taskTitle.value,
-                assignee: e.target.assignee.value, 
+                assignee: e.target.assignee.value,
                 deadline: e.target.deadline.value,
                 priority: e.target.priority.value,
-                assignor: "Ananya",
+                assignor: "Shreya Singh",
             };
 
             addTask(dataObj);
@@ -45,36 +38,36 @@ const TaskForm = ({ getData }) => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleAddTask}>
-                <div>
-                    <label>Task Title</label>
-                    <input type="text" name="taskTitle" />
+        <div className="task-form-container">
+            {/* <h1>Welcome to Task Management Tool!</h1> */}
+            <form onSubmit={handleAddTask} className="task-form">
+                <div className="form-group">
+                    <label><b>Task Title</b></label>
+                    <input type="text" name="taskTitle" className="form-input" />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Assignee</label>
-                    <input type="text" name="assignee" required />
+                    <input type="text" name="assignee" required className="form-input" />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Deadline</label>
-                    <input type="datetime-local" name="deadline" />
+                    <input type="datetime-local" name="deadline" className="form-input" />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Priority</label>
-                    <select name="priority">
+                    <select name="priority" className="form-select">
                         <option value="normal">Normal</option>
                         <option value="low">Low</option>
                         <option value="high">High</option>
                         <option value="urgent">Urgent</option>
                     </select>
                 </div>
-                <button>Add Task</button>
+                <button type="submit" className="add-task-btn">Add Task</button>
             </form>
         </div>
     );
 };
 
-// https://legacy.reactjs.org/docs/typechecking-with-proptypes.html
 TaskForm.propTypes = {
     getData: PropTypes.func.isRequired,
 };

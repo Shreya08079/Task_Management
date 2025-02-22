@@ -5,14 +5,11 @@ import TaskFilters from "../components/TaskFilters";
 import "./TaskPage.css";
 
 const TaskPage = () => {
-    // let list = []; // react does not track the normal variables
-    const [list, setList] = useState([]); // array : length can change, order of elements can change
+    const [list, setList] = useState([]); 
     const [filtersObj, setFiltersObj] = useState({
         priority: "",
     });
-    // A,B,C,D --> 2: C
-    // C,A,B,D --> 2: B
-    // de-coupling
+   
 
     const getData = async () => {
         const query = [];
@@ -26,12 +23,10 @@ const TaskPage = () => {
             credentials: 'include'
         });
         const respBody = await resp.json();
-        // list = respBody.data.tasks;
         const arrayOfTaskList = respBody.data.tasks;
         setList(arrayOfTaskList);
     };
 
-    // getData(); // if you call the function directly, it will happen infinite times
     useEffect(() => {
         getData();
     }, [filtersObj]);

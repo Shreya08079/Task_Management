@@ -5,7 +5,7 @@
 }
 body {
   font-family: Arial, sans-serif;
-  background-color: rgb(54, 53, 53);
+  background-color: black;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,7 +34,7 @@ h1 {
   display: flex;
   flex-direction: column;
 }
-.signup-form {
+/* .signup-form {
   border: 3px solid rgb(47, 44, 44);
   box-shadow: 5px 5px 50px rgb(96, 95, 95);
   height: 400px;
@@ -81,10 +81,209 @@ button:hover {
 }
 .span {
   color: #f7ecec;
+} */
+.signup-form {
+  /* Glass morphism effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Dimensions */
+  width: 400px;
+  min-height: 500px; /* Slightly taller for signup form */
+  padding: 35px;
+  
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  /* Modern rounded corners */
+  border-radius: 20px;
+  
+  /* Sophisticated shadow */
+  box-shadow: 
+    0 25px 45px rgba(0, 0, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  
+  /* Smooth transitions */
+  transition: all 0.3s ease;
+  
+  /* Optional gradient border */
+  position: relative;
+}
+
+/* Adding gradient border effect */
+.signup-form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    #ff6b6b,
+    #4ecdc4,
+    #45b649,
+    #ff6b6b
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: animateBorder 4s linear infinite;
+}
+
+/* Label styling */
+label {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Input styling */
+.signup-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 12px 15px;
+  width: 100%;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.signup-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Button styling */
+.signup-button {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  border: none;
+  border-radius: 15px;
+  padding: 12px 30px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 20px auto;
+  width: auto;
+  min-width: 150px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.signup-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.signup-button:active {
+  transform: translateY(1px);
+}
+
+/* Link styling */
+.linktag {
+  text-align: center;
+  color: #4ecdc4;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.linktag:hover {
+  color: #ff6b6b;
+}
+
+.span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Placeholder styling */
+.signup-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Optional: Add loading state for button */
+.signup-button.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.signup-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Optional: Add error state for inputs */
+.signup-input.error {
+  border-color: #ff6b6b;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Optional: Success message styling */
+.success-message {
+  color: #4ecdc4;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(78, 205, 196, 0.1);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+  margin-top: 10px;
+}
+
+/* Optional: Error message styling */
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  margin-top: 10px;
+}
+
+/* Add this to your body/container */
+body {
+  min-height: 100vh;
+  background: linear-gradient(45deg, #8B5CF6, #EC4899);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
 }
 
 /* CSS FOR LOGIN FORM:  */
-.login-form {
+/* .login-form {
   border: 3px solid rgb(47, 44, 44);
   box-shadow: 5px 5px 50px rgb(96, 95, 95);
   height: 400px;
@@ -94,8 +293,129 @@ button:hover {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+} */
+/* .login-form-dark {
+  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+  width: 400px;
+  min-height: 450px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.login-button {
+
+.login-form-neumorphic {
+  background: #e0e5ec;
+  width: 400px;
+  min-height: 450px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+}
+.login-form-neumorphic {
+  background: #e0e5ec;
+  width: 400px;
+  min-height: 450px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+}
+/* .login-form-neumorphic {
+  background: #e0e5ec;
+  width: 400px;
+  min-height: 450px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+  box-shadow: 
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+  border: none;
+  transition: all 0.3s ease;
+} */
+
+.login-form {
+  /* Glass morphism effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Dimensions */
+  width: 400px;
+  min-height: 450px;
+  padding: 35px;
+  
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  /* Modern rounded corners */
+  border-radius: 20px;
+  
+  /* Sophisticated shadow */
+  box-shadow: 
+    0 25px 45px rgba(0, 0, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  
+  /* Smooth transitions */
+  transition: all 0.3s ease;
+  
+  /* Optional gradient border */
+  position: relative;
+}
+
+/* Adding gradient border effect */
+.login-form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    #ff6b6b,
+    #4ecdc4,
+    #45b649,
+    #ff6b6b
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: animateBorder 4s linear infinite;
+}
+
+/* Animation for gradient border */
+@keyframes animateBorder {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+/* .login-button { */
   border-radius: 15px;
   font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
@@ -104,16 +424,155 @@ button:hover {
   transition: all 0.3s ease-in-out;
   margin-left: 35%;
   margin-top: 20px;
+} */
+/* .login-button {
+  padding: 12px 30px;
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
-.login-input {
+
+.login-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(115deg, 
+    #4fcf70, #fad648, #a767e5, #12bcfe, #44ce7b);
+  background-size: 50% 100%;
+  animation: animate 2s linear infinite;
+  z-index: -1;
+}
+
+.login-button::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  background: white;
+  border-radius: 2px;
+  z-index: -1;
+}
+
+@keyframes animate {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.login-button:hover::after {
+  background: #f8f9fa;
+} */
+/* .login-input {
   border-radius: 10px;
   height: auto;
   width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+} */
+/* .login-button {
+  padding: 12px 30px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 0 #357a38;
 }
 
+.login-button:hover {
+  transform: perspective(1000px) translateY(-2px);
+  box-shadow: 0 8px 0 #357a38;
+}
+
+.login-button:active {
+  transform: perspective(1000px) translateY(4px);
+  box-shadow: 0 2px 0 #357a38;
+} */
+
+/* Style for input fields */
+.login-input {
+  width: 100%; /* Makes input full width of container */
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.15),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  transform: perspective(1000px);
+}
+
+.login-input:focus {
+  outline: none;
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.2),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+  transform: perspective(1000px) translateZ(10px);
+}
+
+/* Container for the form elements */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+/* Label styling */
+.login-label {
+  display: block;
+  margin-bottom: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Button styling */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 0 #357a38;
+}
+
+.login-button:hover {
+  transform: perspective(1000px) translateY(-2px);
+  box-shadow: 0 8px 0 #357a38;
+}
+
+.login-button:active {
+  transform: perspective(1000px) translateY(4px);
+  box-shadow: 0 2px 0 #357a38;
+}
 /* CSS FOR NAVBAR */
 header {
   display: flex;

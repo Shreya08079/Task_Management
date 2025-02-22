@@ -3,7 +3,8 @@ require("dotenv").config(); // Load environment variables
 const mongoose = require("mongoose");
 
 // Get MongoDB credentials from .env
-const MONGO_URI = process.env.MONGO_DB_URL.replace("yourDatabaseName", process.env.MONGO_DB_DATABASE_NAME);
+const MONGO_URI = process.env.MONGODB_URI.replace("TaskManager", process.env.MONGO_DB_DATABASE_NAME);
+
 
 const connectToDb = async () => {
     try {

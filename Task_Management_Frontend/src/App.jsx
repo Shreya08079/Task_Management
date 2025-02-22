@@ -24,13 +24,20 @@ const App = () => {
   });
 
   const afterLogin = (respObj) => {
+    if (!respObj || !respObj.user) {
+      console.error("No user data found in response:", respObj);
+      return;
+    }
+  
     const newStateOfUser = {
       isLoggedIn: true,
-      fullName: respObj.data.user.fullName,
+      fullName: respObj.user.fullName,  // Use respObj.user instead of respObj.data.user
     };
-    localStorage.setItem("isLoggedIn", true);
+  
+    localStorage.setItem("isLoggedIn", "true");
     setCurrUser(newStateOfUser);
   };
+  
   const getLoggedInUserInfo = async () => {
     const resp = await fetch(import.meta.env.VITE_BACKEND_URL + "/users/me", {
       credentials: "include",

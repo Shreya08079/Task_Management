@@ -4,56 +4,74 @@ import { Link } from "react-router";
 const LoginPage = ({ afterLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
-    const resp = await fetch(
-      import.meta.env.VITE_BACKEND_URL + "/users/login",
-      {
+    
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
         method: "POST",
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           email: e.target.email.value,
           password: e.target.password.value,
         }),
-        headers: {
-          "content-type": "application/json",
-        },
+      });
+  
+      // Log response to check if it's valid JSON
+      const textResponse = await response.text();
+      console.log("Raw Response:", textResponse);
+  
+      try {
+        const respObj = JSON.parse(textResponse);  // Try parsing JSON
+        console.log("Login Response:", respObj);
+        
+        if (respObj.status === "success" && respObj.user) {
+          afterLogin(respObj);
+        } else {
+          alert(respObj.message || "Login failed");
+        }
+      } catch (error) {
+        console.error("Invalid JSON response:", textResponse);
+        alert("Unexpected response from server.");
       }
-    );
-    const resObj = await resp.json();
-    console.log(resp);
-    console.log(resObj);
-    if (resObj.status === "success") {
-      afterLogin(resObj);
-    } else {
-      alert(resObj.message);
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
+  
+  
   return (
     <>
-      <form onSubmit={handleLogin} className="login-form">
-        <h1>Sign Into your Account</h1>
-        <label htmlFor="email">Email: </label>
-        <input
-          className="login-input"
-          type="email"
-          placeholder="Email"
-          name="email"
-          required
-        />
-        {/* Uncontrolled Inputs */}
-        <label htmlFor="password">Password: </label>
-        <input
-          className="login-input"
-          type="password"
-          placeholder="Password"
-          name="password"
-          required
-        />
-        {/* Uncontrolled Inputs */}
-        <button className="login-button">Login</button>
-        <Link to="/signup" className="linktag">
-          <span className="span"> Don't have an Account? </span> SignUp
-        </Link>
-      </form>
+  <form className="login-form" onSubmit={handleLogin}>
+  <h1>Welcome Back!!!!!!!!!</h1>
+  
+  <label className="login-label" htmlFor="email">Email:</label>
+  <input
+    className="login-input"
+    type="email"
+    id="email"
+    name="email"
+    placeholder="Email"
+    required
+  />
+
+  <label className="login-label" htmlFor="password">Password:</label>
+  <input
+    className="login-input"
+    type="password"
+    id="password"
+    name="password"
+    placeholder="Password"
+    required
+  />
+
+  <button className="login-button">Login</button>
+  
+  <div className="signup-link">
+    Don't have an Account? <Link to="/signup">SignUp</Link>
+  </div>
+</form>
     </>
   );
 };

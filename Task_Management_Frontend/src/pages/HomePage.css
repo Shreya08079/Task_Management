@@ -1,0 +1,177 @@
+.home-container {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .hero-section {
+    padding: 8rem 2rem;
+    text-align: center;
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+    color: white;
+  }
+  
+  .hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-section p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subscribe-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: white;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subscribe-section h2 {
+    margin-bottom: 1rem;
+    color: #2C3E50;
+    font-size: 2.5rem;
+  }
+  
+  .subscribe-section p {
+    color: #7F8C8D;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .subscribe-form {
+    max-width: 500px;
+    margin: 2rem auto;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .subscribe-form input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subscribe-form input:focus {
+    border-color: #4ECDC4;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+  }
+  
+  /* 3D Button Styles */
+  .subscribe-button {
+    position: relative;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .subscribe-button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(45deg, #FF5252, #FF7B7B);
+    border-radius: 8px;
+    transform: translateZ(-1px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .subscribe-button:hover {
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15),
+                0 2px 4px rgba(0, 0, 0, 0.12);
+  }
+  
+  .subscribe-button:active {
+    transform: translateY(1px) translateZ(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+                0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+  
+  .subscribe-button span {
+    display: block;
+    transform: translateZ(20px);
+    letter-spacing: 0.5px;
+  }
+  
+  .popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #00B894, #00CEC9);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%) translateY(0);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0) translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-section h1 {
+      font-size: 2.5rem;
+    }
+    
+    .subscribe-form {
+      flex-direction: column;
+      padding: 0 1rem;
+    }
+    
+    .subscribe-button {
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .popup {
+      bottom: 10px;
+      right: 10px;
+      left: 10px;
+      text-align: center;
+    }
+  }
+  
+  /* Optional: Add a subtle gradient animation to the hero section */
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .hero-section {
+    background-size: 200% 200%;
+    animation: gradientAnimation 15s ease infinite;
+  }
