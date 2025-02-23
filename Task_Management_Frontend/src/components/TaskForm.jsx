@@ -1,68 +1,110 @@
+
 import PropTypes from "prop-types";
-import "./TaskForm.css"; // Create this CSS file for styling
+import "./TaskForm.css";
 
 const TaskForm = ({ getData }) => {
     const addTask = async (obj) => {
-        const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
-            method: "POST",
-            body: JSON.stringify(obj),
-            credentials: "include",
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        const respObj = await resp.json();
-        if (respObj.status === "success") {
-            console.log("success");
-            getData();
-        } else {
-            alert(respObj.message);
+        try {
+            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
+                method: "POST",
+                body: JSON.stringify({
+                    ...obj,
+                    status: "todo"  // Adding default status
+                }),
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const respObj = await resp.json();
+            console.log("Response:", respObj); // Debug log
+
+            if (respObj.status === "success") {
+                getData();
+            } else {
+                throw new Error(respObj.message || "Failed to add task");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to add task");
         }
     };
 
     const handleAddTask = (e) => {
         e.preventDefault();
-        if (e.target.assignee.value.length > 3) {
-            const dataObj = {
-                taskTitle: e.target.taskTitle.value,
-                assignee: e.target.assignee.value,
-                deadline: e.target.deadline.value,
-                priority: e.target.priority.value,
-                assignor: "Shreya Singh",
-            };
+        const form = e.target;
 
-            addTask(dataObj);
-        } else {
-            alert("Task Title and assignee is required");
+        // Basic validation
+        if (form.taskTitle.value.trim().length === 0) {
+            alert("Task title is required");
+            return;
         }
+
+        if (form.assignee.value.trim().length === 0) {
+            alert("Assignee is required");
+            return;
+        }
+
+        const dataObj = {
+            taskTitle: form.taskTitle.value.trim(),
+            assignee: form.assignee.value.trim(),
+            deadline: form.deadline.value,
+            priority: form.priority.value
+        };
+
+        console.log("Sending data:", dataObj); // Debug log
+        addTask(dataObj);
+        form.reset();
     };
 
     return (
         <div className="task-form-container">
-            {/* <h1>Welcome to Task Management Tool!</h1> */}
             <form onSubmit={handleAddTask} className="task-form">
                 <div className="form-group">
-                    <label><b>Task Title</b></label>
-                    <input type="text" name="taskTitle" className="form-input" />
+                    <label>Task Title</label>
+                    <input 
+                        type="text" 
+                        name="taskTitle" 
+                        className="form-input"
+                        placeholder="Enter task title"
+                        required 
+                    />
                 </div>
+
                 <div className="form-group">
                     <label>Assignee</label>
-                    <input type="text" name="assignee" required className="form-input" />
+                    <input 
+                        type="text" 
+                        name="assignee" 
+                        className="form-input"
+                        placeholder="Enter assignee name"
+                        required 
+                    />
                 </div>
+
                 <div className="form-group">
                     <label>Deadline</label>
-                    <input type="datetime-local" name="deadline" className="form-input" />
+                    <input 
+                        type="datetime-local" 
+                        name="deadline" 
+                        className="form-input"
+                        required 
+                    />
                 </div>
+
                 <div className="form-group">
                     <label>Priority</label>
-                    <select name="priority" className="form-select">
+                    <select name="priority" className="form-select" required>
                         <option value="normal">Normal</option>
                         <option value="low">Low</option>
                         <option value="high">High</option>
                         <option value="urgent">Urgent</option>
                     </select>
                 </div>
-                <button type="submit" className="add-task-btn">Add Task</button>
+
+                <button type="submit" className="add-task-btn">
+                    Add Task
+                </button>
             </form>
         </div>
     );

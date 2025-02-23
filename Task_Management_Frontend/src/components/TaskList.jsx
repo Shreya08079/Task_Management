@@ -1,178 +1,153 @@
-import { useState } from "react";
-import "./taskList.css"; //ES6
+
 import PropTypes from "prop-types";
-// require("./taskList.css") // CJS
+import "./TaskList.css";
 
-// re-render === re-run the function
-const TaskList = ({ list, getData, filterObj, title }) => {
-    // HW, TODO : add prop validation
-    const [editTask, setEditTask] = useState(-1);
-    const [editObject, setEditObject] = useState({});
-    // console.log("🟡 : editObject:", editObject);
-    // console.log("🟡 : editTask:", editTask); // 2
-
-    const handleEditField = (key, value) => {
-        // console.log(key, value);
-        setEditObject((prev) => {
-            const newObj = { ...prev };
-            newObj[key] = value;
-            return newObj;
-        });
-    };
-
-    const handleEditData = async () => {
-        const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${editObject._id}`, {
-            method: "PATCH",
-            body: JSON.stringify(editObject),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        const respObj = await resp.json();
-        if (respObj.status === "success") {
-            console.log("success :: updated");
-            handleCancel();
-            getData();
-        } else {
-            alert(respObj.message);
+const TaskList = ({ title, tasks, getData, type }) => {
+    const handleStatusChange = async (taskId, newStatus) => {
+        try {
+            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
+                method: "PATCH",
+                body: JSON.stringify({ status: newStatus }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            });
+            const data = await resp.json();
+            if (data.status === "success") {
+                getData();
+            }
+        } catch (error) {
+            alert("Error updating task status");
         }
-    };
-
-    const handleCancel = () => {
-        setEditTask(-1);
-        setEditObject({});
     };
 
     const handleDelete = async (taskId) => {
-        const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
-            method: "DELETE",
-        });
-        console.log("🟡 : resp:", resp);
-        if (resp.status === 204) {
-            console.log("success :: deleted");
-            getData();
-        } else {
-            alert("Error in delete");
+        if (!confirm("Are you sure you want to delete this task?")) return;
+        
+        try {
+            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
+                method: "DELETE",
+                credentials: "include"
+            });
+            if (resp.status === 204) {
+                getData();
+            }
+        } catch (error) {
+            alert("Error deleting task");
         }
     };
 
-    const filteredList = list.filter((elem) => {
-        if (elem.status === filterObj.status) return true;
-        else return false;
-    });
+    const getPriorityColor = (priority) => {
+        const colors = {
+            urgent: "#EF4444",
+            high: "#F97316",
+            normal: "#EAB308",
+            low: "#22C55E"
+        };
+        return colors[priority] || colors.normal;
+    };
 
-    const handleMarkAsDone = async (taskId) => {
-        const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
-            method: "PATCH",
-            body: JSON.stringify({
-                status: "done",
-            }),
-            headers: {
-                "content-type": "application/json",
-            },
-        });
-        const respObj = await resp.json();
-        if (respObj.status === "success") {
-            console.log("success :: updated");
-            getData();
-        } else {
-            alert(respObj.message);
-        }
+    const getPriorityIcon = (priority) => {
+        const icons = {
+            urgent: "🔴",
+            high: "🟠",
+            normal: "🟡",
+            low: "🟢"
+        };
+        return icons[priority] || "🟡";
+    };
+
+    const formatDate = (dateString) => {
+        const options = { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit', 
+            minute: '2-digit'
+        };
+        return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
     return (
-        <div className="task-list-main">
-            <h3 className="task-list-title">{title}</h3>
-            <div className="task-list-task-container">
-                {filteredList.map((elem, idx) => {
-                    // key :: best: unique property on your own, good: index, worst: nothing as key
-                    return (
-                        <div key={elem._id} className="task-card">
-                            <h5>{idx}</h5>
-                            <p>{elem.workTitle}</p>
-                            <p>{elem.taskTitle}</p>
-                            {/* short hand of if - else  */}
-                            {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator */}
-                            {idx === editTask ? (
-                                <div>
-                                    <label>Assignee</label>
-                                    <input
-                                        value={editObject.assignee}
-                                        onChange={(e) => {
-                                            handleEditField("assignee", e.target.value);
-                                        }}
-                                    />
-                                    {/* controlled  input*/}
+        <div className="task-list-container">
+            <div className="task-list-header">
+                <h3>{title}</h3>
+                <span className="task-count">{tasks.length}</span>
+            </div>
+
+            <div className="tasks-wrapper">
+                {tasks.length === 0 ? (
+                    <div className="empty-state">
+                        <p>No tasks found</p>
+                        <span className="empty-icon">📝</span>
+                    </div>
+                ) : (
+                    <div className="task-grid">
+                        {tasks.map(task => (
+                            <div key={task._id} className="task-card">
+                                <div className="task-card-header">
+                                    <span className="priority-badge" style={{
+                                        backgroundColor: getPriorityColor(task.priority),
+                                        opacity: 0.1
+                                    }}>
+                                        {getPriorityIcon(task.priority)} {task.priority.toUpperCase()}
+                                    </span>
+                                    <div className="task-status">
+                                        {task.status === "todo" ? (
+                                            <span className="status-badge pending">Pending</span>
+                                        ) : (
+                                            <span className="status-badge completed">Completed</span>
+                                        )}
+                                    </div>
                                 </div>
-                            ) : (
-                                <p>{elem.assignee}</p>
-                            )}
-                            <p>{elem.assignor}</p>
-                            <p>{elem.deadline}</p>
-                            {idx === editTask ? (
-                                <div>
-                                    <label>Priority</label>
-                                    <select
-                                        name="priority"
-                                        value={editObject.priority}
-                                        onChange={(e) => {
-                                            handleEditField("priority", e.target.value);
-                                        }}
+
+                                <div className="task-card-content">
+                                    <h4 className="task-title">{task.taskTitle}</h4>
+                                    
+                                    <div className="task-info">
+                                        <div className="info-item">
+                                            <span className="info-label">👤 Assignee:</span>
+                                            <span className="info-value">{task.assignee}</span>
+                                        </div>
+                                        
+                                        <div className="info-item">
+                                            <span className="info-label">⏰ Deadline:</span>
+                                            <span className="info-value">{formatDate(task.deadline)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="task-card-actions">
+                                    {task.status === "todo" && (
+                                        <button
+                                            className="action-btn complete-btn"
+                                            onClick={() => handleStatusChange(task._id, "done")}
+                                        >
+                                            ✓ Mark Complete
+                                        </button>
+                                    )}
+                                    <button
+                                        className="action-btn delete-btn"
+                                        onClick={() => handleDelete(task._id)}
                                     >
-                                        <option value="normal">Normal</option>
-                                        <option value="low">Low</option>
-                                        <option value="high">High</option>
-                                        <option value="urgent">Urgent</option>
-                                    </select>
-                                    {/* controlled  input*/}
+                                        🗑️ Delete
+                                    </button>
                                 </div>
-                            ) : (
-                                <p>{elem.priority}</p>
-                            )}
-
-                            <p>{elem.status}</p>
-                            {idx === editTask ? (
-                                <div>
-                                    <button onClick={handleEditData}>Submit Changes</button>
-                                    <button onClick={handleCancel}>Cancel</button>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={() => {
-                                        setEditObject(elem);
-                                        setEditTask(idx);
-                                    }}
-                                >
-                                    Edit
-                                </button>
-                            )}
-
-                            <button
-                                onClick={() => {
-                                    handleDelete(elem._id);
-                                }}
-                            >
-                                Delete
-                            </button>
-                            <button
-                                onClick={() => {
-                                    handleMarkAsDone(elem._id);
-                                }}
-                            >
-                                Mark as Done
-                            </button>
-                        </div>
-                    );
-                })}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
-// https://legacy.reactjs.org/docs/typechecking-with-proptypes.html
 TaskList.propTypes = {
-    list: PropTypes.array,
-    getData: PropTypes.func,
+    title: PropTypes.string.isRequired,
+    tasks: PropTypes.array.isRequired,
+    getData: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
 };
 
 export default TaskList;

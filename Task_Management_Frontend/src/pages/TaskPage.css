@@ -1,6 +1,58 @@
-.multi-task-lists-container {
+
+.task-page {
+    min-height: 100vh;
+    background: #f0f2f5;
+    padding: 2rem;
+}
+
+.task-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+}
+
+.left-panel {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.right-panel {
     display: flex;
-    background-color: lime;
-    padding: 1.5rem;
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.task-section h2 {
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.task-status-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .task-page-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .left-panel {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .task-page {
+        padding: 1rem;
+    }
+    
+    .task-status-sections {
+        grid-template-columns: 1fr;
+    }
 }

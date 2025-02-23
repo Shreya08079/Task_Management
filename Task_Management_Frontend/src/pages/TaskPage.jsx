@@ -1,44 +1,71 @@
+
 import { useEffect, useState } from "react";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
-import TaskFilters from "../components/TaskFilters";
 import "./TaskPage.css";
 
 const TaskPage = () => {
-    const [list, setList] = useState([]); 
-    const [filtersObj, setFiltersObj] = useState({
-        priority: "",
+    const [tasks, setTasks] = useState([]);
+    const [filters, setFilters] = useState({
+        priority: "all",
+        status: "all",
     });
-   
 
     const getData = async () => {
-        const query = [];
-        if (filtersObj.priority) {
-            query.push(`priority=${filtersObj.priority}`);
+        try {
+            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
+                credentials: 'include'
+            });
+            const data = await resp.json();
+            if (data.status === "success") {
+                setTasks(data.data.tasks);
+            }
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
         }
-        console.log(query);
-        const resp = await fetch(`
-            ${import.meta.env.VITE_BACKEND_URL}/tasks?${query}
-        `,{
-            credentials: 'include'
-        });
-        const respBody = await resp.json();
-        const arrayOfTaskList = respBody.data.tasks;
-        setList(arrayOfTaskList);
     };
 
     useEffect(() => {
         getData();
-    }, [filtersObj]);
+    }, []);
 
     return (
-        <div>
-            <h2>Welcome to Task Management Tool!</h2>
-            <TaskForm getData={getData} />
-            <TaskFilters setFiltersObj={setFiltersObj} />
-            <div className="multi-task-lists-container">
-                <TaskList list={list} getData={getData} filterObj={{ status: "todo" }} title="Todo List" />
-                <TaskList list={list} getData={getData} filterObj={{ status: "done" }} title="Done List" />
+        <div className="task-page">
+            <div className="task-page-container">
+                {/* Left Panel - Task Form */}
+                <div className="left-panel">
+                    <TaskForm getData={getData} />
+                </div>
+
+                {/* Right Panel - Task Lists */}
+                <div className="right-panel">
+                    {/* All Tasks Section */}
+                    <div className="task-section">
+                        <h2>All Tasks</h2>
+                        <TaskList 
+                            title="All Tasks"
+                            tasks={tasks}
+                            getData={getData}
+                            type="all"
+                        />
+                    </div>
+
+                    {/* Task Status Sections */}
+                    <div className="task-status-sections">
+                        <TaskList 
+                            title="Pending Tasks"
+                            tasks={tasks.filter(task => task.status === "todo")}
+                            getData={getData}
+                            type="pending"
+                        />
+                        <TaskList 
+                            title="Completed Tasks"
+                            tasks={tasks.filter(task => task.status === "done")}
+                            getData={getData}
+                            type="completed"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

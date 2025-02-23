@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './TaskFilters.css'; // Create this CSS file for styling
+import './TaskFilters.css'; 
 
 const TaskFilters = ({ setFiltersObj }) => {
     const [activeFilters, setActiveFilters] = useState({});
