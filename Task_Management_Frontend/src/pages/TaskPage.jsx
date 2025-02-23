@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
@@ -11,22 +10,26 @@ const TaskPage = () => {
         status: "all",
     });
 
+    // Fetch all tasks
     const getData = async () => {
         try {
-            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
-                credentials: 'include'
-            });
-            const data = await resp.json();
-            if (data.status === "success") {
-                setTasks(data.data.tasks);
-            }
+          const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
+            credentials: 'include'
+          });
+          const data = await resp.json();
+          console.log("Fetched data:", data);  // Log response for debugging
+      
+          if (data.status === "success") {
+            setTasks(data.data.tasks);  // Correctly set tasks based on the response
+          }
         } catch (error) {
-            console.error("Error fetching tasks:", error);
+          console.error("Error fetching tasks:", error);
         }
-    };
+      };
+      
 
     useEffect(() => {
-        getData();
+        getData();  // Fetch tasks when the component mounts
     }, []);
 
     return (
@@ -34,7 +37,7 @@ const TaskPage = () => {
             <div className="task-page-container">
                 {/* Left Panel - Task Form */}
                 <div className="left-panel">
-                    <TaskForm getData={getData} />
+                    <TaskForm getData={getData} /> {/* Pass getData to TaskForm */}
                 </div>
 
                 {/* Right Panel - Task Lists */}

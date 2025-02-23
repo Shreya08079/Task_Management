@@ -3,41 +3,45 @@ import PropTypes from "prop-types";
 import "./TaskList.css";
 
 const TaskList = ({ title, tasks, getData, type }) => {
+    console.log("Tasks passed to TaskList:", tasks);  // Check if tasks are passed correctly
+
     const handleStatusChange = async (taskId, newStatus) => {
         try {
-            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
-                method: "PATCH",
-                body: JSON.stringify({ status: newStatus }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include"
-            });
-            const data = await resp.json();
-            if (data.status === "success") {
-                getData();
-            }
+          const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ status: newStatus }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include"
+          });
+          const data = await resp.json();
+          if (data.status === "success") {
+            getData();  // Refresh tasks after status change
+          }
         } catch (error) {
-            alert("Error updating task status");
+          alert("Error updating task status");
         }
-    };
+      };
+      
 
-    const handleDelete = async (taskId) => {
+
+      const handleDelete = async (taskId) => {
         if (!confirm("Are you sure you want to delete this task?")) return;
         
         try {
-            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
-                method: "DELETE",
-                credentials: "include"
-            });
-            if (resp.status === 204) {
-                getData();
-            }
+          const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks/${taskId}`, {
+            method: "DELETE",
+            credentials: "include"
+          });
+          if (resp.status === 204) {
+            getData();  // Refresh tasks after deletion
+          }
         } catch (error) {
-            alert("Error deleting task");
+          alert("Error deleting task");
         }
-    };
-
+      };
+      
     const getPriorityColor = (priority) => {
         const colors = {
             urgent: "#EF4444",

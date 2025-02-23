@@ -19,11 +19,7 @@ const taskSchema = new mongoose.Schema(
             required: true,
             trim: true,
         }, 
-        assignor: {
-            type: String,
-            required: true,
-            trim: true,
-        },
+    
         priority: {
             type: String,
             default: "normal", // Normal, urgent, Urgent, Quick, Instant, Important, low, not urgent, high, high priority

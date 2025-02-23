@@ -3,59 +3,60 @@ import PropTypes from "prop-types";
 import "./TaskForm.css";
 
 const TaskForm = ({ getData }) => {
-    const addTask = async (obj) => {
+    const addTask = async (dataObj) => {
         try {
-            const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/tasks`, {
                 method: "POST",
-                body: JSON.stringify({
-                    ...obj,
-                    status: "todo"  // Adding default status
-                }),
-                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(dataObj),  // Send dataObj as the request body
             });
-            const respObj = await resp.json();
-            console.log("Response:", respObj); // Debug log
-
-            if (respObj.status === "success") {
-                getData();
-            } else {
-                throw new Error(respObj.message || "Failed to add task");
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to create task");
             }
+    
+            const createdTask = await response.json();  // Get the created task data
+            console.log("Task created successfully:", createdTask); // Debug log
+            getData();  // Refresh the task list
+            alert("Task created successfully!");
         } catch (error) {
-            console.error("Error:", error);
-            alert("Failed to add task");
+            console.error("Error creating task:", error);
+            alert("Error creating task: " + error.message);
         }
     };
+    
 
     const handleAddTask = (e) => {
         e.preventDefault();
         const form = e.target;
-
+    
         // Basic validation
         if (form.taskTitle.value.trim().length === 0) {
             alert("Task title is required");
             return;
         }
-
+    
         if (form.assignee.value.trim().length === 0) {
             alert("Assignee is required");
             return;
         }
-
+    
         const dataObj = {
             taskTitle: form.taskTitle.value.trim(),
             assignee: form.assignee.value.trim(),
             deadline: form.deadline.value,
-            priority: form.priority.value
+            priority: form.priority.value,
         };
-
+    
         console.log("Sending data:", dataObj); // Debug log
-        addTask(dataObj);
-        form.reset();
+        addTask(dataObj);  // Send data to addTask function
+        form.reset();  // Reset the form after submission
+        getData();
     };
+    
 
     return (
         <div className="task-form-container">
