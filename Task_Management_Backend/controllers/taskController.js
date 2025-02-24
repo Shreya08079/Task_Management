@@ -10,7 +10,7 @@ const Task = require('../models/taskModel.js');  // Assuming you have a Task mod
           return res.status(400).json({ error: "Missing required fields" });
       }
 
-      // console.log("Request body:", req.body);  // Debug log to check the incoming data
+       console.log("Request body:", req.body);  // Debug log to check the incoming data
 
       const newTask = new Task({
           taskTitle,
@@ -22,7 +22,7 @@ const Task = require('../models/taskModel.js');  // Assuming you have a Task mod
       // Save task to the database
       await newTask.save();
 
-      // console.log("Created task:", newTask);  // Debug log to verify saved task
+      console.log("Created task:", newTask);  // Debug log to verify saved task
       res.status(201).json(newTask);  // Return created task
   } catch (error) {
       console.error("Error creating task:", error);  // More detailed backend logging
